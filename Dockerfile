@@ -1,6 +1,6 @@
 FROM ubuntu:bionic
 
-MAINTAINER Mohammad Mahdi Baghbani Pourvahid <MahdiBaghbani@protonmail.com>
+LABEL maintainer="Mohammad Mahdi Baghbani Pourvahid <MahdiBaghbani@protonmail.com>"
 
 # set frontend to noneinteractive.
 ARG DEBIAN_FRONTEND=noninteractive
