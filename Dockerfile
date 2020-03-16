@@ -55,8 +55,17 @@ RUN chmod 600 ~/.gnupg/*
 # clean apt-get.
 RUN apt-get clean all
 
-# install llvm toolchain.
-RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+# get llvm installer shell script.
+RUN wget https://apt.llvm.org/llvm.sh
+RUN chmod +x llvm.sh
+
+# install llvm versions.
+RUN ./llvm.sh 9
+RUN ./llvm.sh 10
+RUN ./llvm.sh 11
+
+# remove installer.
+RUN rm ./llvm.sh
 
 # install codeclimate coverage reporter.
 RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/bin/cc-test-reporter
