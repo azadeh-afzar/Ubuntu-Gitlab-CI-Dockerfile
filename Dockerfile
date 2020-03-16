@@ -59,8 +59,3 @@ RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 RUN curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/bin/cc-test-reporter
 RUN chmod +x /usr/bin/cc-test-reporter
 
-# specify working directory.
-ENV TESTBUILD ~/test_and_build
-RUN mkdir -p $TESTBUILD
-WORKDIR $TESTBUILD
-
