@@ -14,17 +14,25 @@ RUN apt-get update --assume-yes
 # install apt utils to speed up configs.
 RUN apt-get install --assume-yes --no-install-recommends apt-utils
 
-# install make.
-RUN apt-get install --assume-yes make
-
-# install GNU C Compiler.
-RUN apt-get install --assume-yes gcc
-
 # install system libs.
 RUN apt-get install --assume-yes build-essential libssl-dev zlib1g-dev libbz2-dev
 RUN apt-get install --assume-yes libreadline-dev libsqlite3-dev libncurses5-dev libc6
 RUN apt-get install --assume-yes libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev
-RUN apt-get install --assume-yes lsb-release lsb-core python-openssl
+RUN apt-get install --assume-yes lsb-release lsb-core python-openssl software-properties-common
+
+# install make.
+RUN apt-get install --assume-yes make
+
+# install GNU C Compiler versions.
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+RUN apt-get install --assume-yes gcc-7 g++-7
+RUN apt-get install --assume-yes gcc-8 g++-8
+RUN apt-get install --assume-yes gcc-9 g++-9
+
+# set GNU C Compiler versions priorities.
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
 
 # set locale.
 RUN apt-get install --assume-yes locales
