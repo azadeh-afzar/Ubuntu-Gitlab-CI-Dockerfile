@@ -52,6 +52,9 @@ RUN chmod 700 ~/.gnupg
 RUN echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
 RUN chmod 600 ~/.gnupg/*
 
+# clean apt-get.
+RUN apt-get clean all
+
 # install llvm toolchain.
 RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 
