@@ -24,7 +24,7 @@ RUN apt-get install --assume-yes gcc
 RUN apt-get install --assume-yes build-essential libssl-dev zlib1g-dev libbz2-dev
 RUN apt-get install --assume-yes libreadline-dev libsqlite3-dev libncurses5-dev libc6
 RUN apt-get install --assume-yes libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev
-RUN apt-get install --assume-yes python-openssl
+RUN apt-get install --assume-yes lsb-release lsb-core python-openssl
 
 # set locale.
 RUN apt-get install --assume-yes locales
