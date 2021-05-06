@@ -43,9 +43,9 @@ gitlab build untaged:
   before_script:
     - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
-    - docker pull ${CI_REGISTRY_IMAGE}:ready || true
-    - docker build --pull --cache-from ${CI_REGISTRY_IMAGE}:ready -t ${CI_REGISTRY_IMAGE}:ready .
-    - docker push ${CI_REGISTRY_IMAGE}:ready
+    - docker pull ${CI_REGISTRY_IMAGE}:develop || true
+    - docker build --pull --cache-from ${CI_REGISTRY_IMAGE}:develop -t ${CI_REGISTRY_IMAGE}:develop .
+    - docker push ${CI_REGISTRY_IMAGE}:develop
   only:
     - master
   except:
@@ -56,31 +56,42 @@ docker build untaged:
   before_script:
     - docker login --username ${DOCKER_REGISTRY_USER} --password ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - docker pull ${DOCKER_REGISTRY_IMAGE}:ready || true
-    - docker build --pull --cache-from ${DOCKER_REGISTRY_IMAGE}:ready -t ${DOCKER_REGISTRY_IMAGE}:ready .
-    - docker push ${DOCKER_REGISTRY_IMAGE}:ready
+    - docker pull ${DOCKER_REGISTRY_IMAGE}:develop || true
+    - docker build --pull --cache-from ${DOCKER_REGISTRY_IMAGE}:develop -t ${DOCKER_REGISTRY_IMAGE}:develop .
+    - docker push ${DOCKER_REGISTRY_IMAGE}:develop
   only:
     - master
   except:
     - tags
 
-gitlab build merge requests:
+gitlab build untaged branch:
   stage: build
   before_script:
     - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
-    - docker build --pull -t ${CI_REGISTRY_IMAGE}:merge .
-    - docker push ${CI_REGISTRY_IMAGE}:merge
-  only:
-    - merge_requests
+    - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} || true
+    - docker build --pull --cache-from ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} .
+    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH}
+  except:
+    - master
+    - tags
 
-docker build merge requests:
+docker build untaged branch:
   stage: build
   before_script:
     - docker login --username ${DOCKER_REGISTRY_USER} --password ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
   script:
-    - docker build --pull -t ${DOCKER_REGISTRY_IMAGE}:merge .
-    - docker push ${DOCKER_REGISTRY_IMAGE}:merge
+    - docker pull ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} || true
+    - docker build --pull --cache-from ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} -t ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH} .
+    - docker push ${DOCKER_REGISTRY_IMAGE}:${CI_COMMIT_BRANCH}
+  except:
+    - master
+    - tags
+
+build merge requests:
+  stage: build
+  script:
+    - docker build -t ${DOCKER_REGISTRY_IMAGE}:merge .
   only:
     - merge_requests
 
